@@ -1,6 +1,6 @@
 # speed
 
-Made with SFML, not sure what version
+Made with SFML, not sure what version, the link doesn't work, go into the resources folder to run .exe
 
 Speed is a card game where you place cards on one of two stacks going either up or down.
 
