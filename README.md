@@ -4,7 +4,7 @@ Made with SFML, not sure what version, the link doesn't work, go into the resour
 
 Speed is a card game where you place cards on one of two stacks going either up or down.
 
-This has LAN play and there's no need to gost a server as the client comes with server build in.
+This has LAN play and there's no need to host the server as the client comes with server build in.
 
 Once you get into a game keep restarting the game untill both clients update at the same time.
 
