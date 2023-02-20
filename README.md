@@ -1,5 +1,7 @@
 # speed
 
+Made with SFML, not sure what version
+
 Speed is a card game where you place cards on one of two stacks going either up or down.
 
 This has LAN play and there's no need to gost a server as the client comes with server build in.
