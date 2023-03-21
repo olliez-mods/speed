@@ -3,6 +3,7 @@
 Made with SFML, not sure what version, the link doesn't work, go into the resources folder to run .exe
 
 Speed is a card game where you place cards on one of two stacks going either up or down.
+[YT tortorial](https://www.youtube.com/watch?v=KDsd6MG3t4w)
 
 This has LAN play and there's no need to host a server as the client comes with server built in.
 
