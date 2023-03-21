@@ -26,8 +26,9 @@ Join:
     
     If your not on the same WiFi, or LAN isn't working then you'll need to use the hosting
     computers IP address, stick it in the white box to join.
+    
     NOTE: if your on different WiFi networks you will need to port forward your IP address
-    to the port 
+    to the port 5300
 To play:
 
     Refer to the YouTube tortorial (above) for rules to play
@@ -42,5 +43,3 @@ To play:
     
     Once your pile of face down cards no longer spits out anything and your hand is empty
     YOU WIN!
-
-If you both get to a point where you dont have any cards to put in the center, click the stack of cards in the middle, once both of you have done this new cards will flip over and the game ocntinues
