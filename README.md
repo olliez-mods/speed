@@ -16,6 +16,9 @@ Host:
     Now you will be in the host game screen, select the white box and type
     the name of the game (can be anything), now press "Host Game", and that's it.
     
+    NOTE: if your on different WiFi networks you will need to port forward your IP address
+    to the port 5300
+    
 Join:
     
     To join a game hosted by your friend you have 2 options, join a LAN game, or 
@@ -27,8 +30,6 @@ Join:
     If your not on the same WiFi, or LAN isn't working then you'll need to use the hosting
     computers IP address, stick it in the white box to join.
     
-    NOTE: if your on different WiFi networks you will need to port forward your IP address
-    to the port 5300
 To play:
 
     Refer to the YouTube tortorial (above) for rules to play
