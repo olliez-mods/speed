@@ -14,7 +14,8 @@ Host:
         
     If you want to host the game press the "Host" button in the main menu.
     Now you will be in the host game screen, select the white box and type
-    the name of the game (can be anything), now press "Host Game", and that's it.
+    the name of the game (can be anything but is only applicable to LAN games), 
+    now press "Host Game", and that's it.
     
     NOTE: if your on different WiFi networks you will need to port forward your IP address
     to the port 5300
@@ -27,8 +28,8 @@ Join:
     If both people are on the same WiFi then wait for the games' name to appear on the
     right side of the screen press it, and your in
     
-    If your not on the same WiFi, or LAN isn't working then you'll need to use the hosting
-    computers IP address, stick it in the white box to join.
+    If you're not on the same WiFi, or LAN isn't working then you'll need to use the hosting
+    computers IP address, stick it in the white box and click join.
     
 To play:
 
@@ -42,5 +43,5 @@ To play:
     of the board (it is not nesasary to click it at the same time, only that both player
     HAVE clicked it)
     
-    Once your pile of face down cards no longer spits out anything and your hand is empty
+    Once your pile of face down cards no longer no longer appears and your hand is empty
     YOU WIN!
