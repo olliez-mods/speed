@@ -1,6 +1,7 @@
 # speed
 
-Made with SFML, not sure what version, the link doesn't work, go into the resources folder to run .exe
+Made with SFML 2.5.1 in 2022.
+Updated it in 2023 to work with SFML 3.0.0, this was made with a library I developed for SFML called SFAS
 
 Speed is a card game where you place cards on one of two stacks going either up or down.
 
