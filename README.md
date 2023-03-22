@@ -3,6 +3,8 @@
 Made with SFML 2.5.1 in 2022.
 Updated it in 2023 to work with SFML 3.0.0, this was made with a library I developed for SFML called SFAS
 
+Download Speed.zip for the exe
+
 Speed is a card game where you place cards on one of two stacks going either up or down.
 
 [YouTube tortorial](https://www.youtube.com/watch?v=KDsd6MG3t4w)
