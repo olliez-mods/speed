@@ -13,7 +13,7 @@ float sendPingTimer = 0;
 float playerTimeout[2] = { 0, 0 };
 
 unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-std::default_random_engine e(seed);
+std::default_random_engine rng(seed);
 
 sf::Clock dClock;
 
@@ -54,10 +54,11 @@ void Server::startServer()
 void sendLocalPing()
 {
     sf::Packet data;
-    data << "LANserverUp" << Server::LANname << sf::IpAddress::getLocalAddress().toString();
-    localUDPSocket.send(data, "192.168.1.255", 9400);
-    localUDPSocket.send(data, "192.168.1.255", 9500);
-    localUDPSocket.send(data, "192.168.1.255", 9600);
+    data << "LANserverUp" << Server::LANname << sf::IpAddress::getLocalAddress().value().toString();
+    // if this doesnt work use 192.168.1.255 as the broadcast value
+    localUDPSocket.send(data, sf::IpAddress::Broadcast, 9400);
+    localUDPSocket.send(data, sf::IpAddress::Broadcast, 9500);
+    localUDPSocket.send(data, sf::IpAddress::Broadcast, 9600);
 }
 
 void Server::tickServer()
@@ -81,7 +82,7 @@ void Server::tickServer()
     }
     else
     {
-        if (listener.accept(players[0]) != sf::Socket::NotReady) {
+        if (listener.accept(players[0]) != sf::Socket::Status::NotReady) {
             std::cout << "SERVER : player 1 connected\n";
             plyer1Connected = true;
         }
@@ -98,7 +99,7 @@ void Server::tickServer()
     }
     else
     {
-        if (listener.accept(players[1]) != sf::Socket::NotReady) {
+        if (listener.accept(players[1]) != sf::Socket::Status::NotReady) {
             std::cout << "SERVER : player 2 connected\n";
             plyer2Connected = true;
         }
@@ -107,13 +108,13 @@ void Server::tickServer()
 
     if (plyer1ReadyNext && plyer2ReadyNext)
     {
+        
 
-
-        sf::Uint16 suit;
-        sf::Uint16 card;
+        int16_t suit;
+        int16_t card;
         if (shuffledDeck.size() < 2) {
             shuffledDeck = deck;
-            std::random_shuffle(shuffledDeck.begin(), shuffledDeck.end(), [](int n) { return e() % n; });
+            std::shuffle(shuffledDeck.begin(), shuffledDeck.end(), rng);
         }
         suit = shuffledDeck[0][0];
         card = shuffledDeck[0][1];
@@ -141,7 +142,7 @@ void Server::tickServer()
     for (int i = 0; i < 2; i++)
     {
         sf::Packet data;
-        if (players[i].receive(data) != sf::Socket::NotReady)
+        if (players[i].receive(data) != sf::Socket::Status::NotReady)
         {
             std::string command;
             data >> command;
@@ -154,7 +155,7 @@ void Server::tickServer()
                 if (command == "shuffle")
                 {
                     shuffledDeck = deck;
-                    std::random_shuffle(deck.begin(), deck.end());
+                    std::shuffle(deck.begin(), deck.end(), rng);
                 }
                 if (command == "win")
                 {
@@ -189,17 +190,16 @@ void Server::tickServer()
                 {
                     shuffledDeck = deck;
 
-                    std::random_shuffle(shuffledDeck.begin(), shuffledDeck.end(), [](int n) { return e() % n; });
+                    std::shuffle(shuffledDeck.begin(), shuffledDeck.end(), rng);
                     for (int p = 0; p < 2; p++)
                     {
                         sf::Packet Qpacket;
                         Qpacket << "newGame";
                         players[p].send(Qpacket);
-                        std::cout << "send new Game message to player " << p << "\n";
                         for (int i = 0; i < 20; i++)
                         {
-                            sf::Uint16 suit = shuffledDeck[i][0];
-                            sf::Uint16 card = shuffledDeck[i][1];
+                            int16_t suit = shuffledDeck[i][0];
+                            int16_t card = shuffledDeck[i][1];
 
                             sf::Packet packet;
                             packet << "addToDeck" << suit << card;
@@ -210,8 +210,8 @@ void Server::tickServer()
 
 
 
-                    sf::Uint16 suit = shuffledDeck[0][0];
-                    sf::Uint16 card = shuffledDeck[0][1];
+                    int16_t suit = shuffledDeck[0][0];
+                    int16_t card = shuffledDeck[0][1];
 
                     sf::Packet packet;
                     packet << "setLeft" << suit << card;

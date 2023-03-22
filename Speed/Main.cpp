@@ -6,10 +6,13 @@
 #include "GameWindow.h"
 #include "Menus.h"
 #include "Window.h"
+#include "SFAS/RpFinder.hpp"
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Speed" , sf::Style::Titlebar | sf::Style::Close);
+    sfas::setResPath("Resources/");
+
+    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 600)), "Speed" , sf::Style::Titlebar | sf::Style::Close);
 
 
     MainMenu mainMenuWindow;

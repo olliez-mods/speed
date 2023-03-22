@@ -1,13 +1,12 @@
-#pragma once
+#ifndef Server_h
+#define Server_h
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <vector>
-
-#include <chrono>
 #include <string>
-//#include <algorithm>  
-//#include <cstdlib>
+#include <algorithm>
 #include<random>
+#include <chrono>
 class Server
 {
 
@@ -21,3 +20,4 @@ public:
 	static void sendData(sf::Packet data, int toWho = 0);
 };
 
+#endif

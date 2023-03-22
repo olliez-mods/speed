@@ -1,7 +1,9 @@
-#pragma once
+#ifndef Window_h
+#define Window_h
+
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "Widgets.h"
+#include "SFAS/Widgets.hpp"
 
 class Window
 {
@@ -12,4 +14,6 @@ public:
 	virtual void checkEvents(sf::Event event);
 	virtual int getNewWinId();
 	virtual void startWindow();
+    
 };
+#endif

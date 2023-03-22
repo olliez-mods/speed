@@ -1,12 +1,15 @@
-#pragma once
+#ifndef Menus_h
+#define Menus_h
 #include <iostream>
 #include <string>
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
-#include "Widgets.h"
+#include "SFAS/Widgets.hpp"
 #include "Window.h"
 #include "Server.h"
 #include "Client.h"
+
+using namespace sfas;
 
 class MainMenu : public Window {
 	int newWinId = 1;
@@ -53,7 +56,7 @@ class JoinMenu : public Window {
 	sf::RectangleShape tableRect;
 
 	sf::UdpSocket UdpSocket;
-	sf::IpAddress sender;
+	sf::IpAddress sender = sf::IpAddress::Any;
 	unsigned short port;
 
 
@@ -66,11 +69,13 @@ class JoinMenu : public Window {
 
 	Button joinButton;
 	Input inputTest;
+	sf::Text statusText;
 public:
 	void startWindow();
 	void tick(sf::RenderWindow& window);
 	void checkEvents(sf::Event event);
 	int getNewWinId();
+    
 };
 
 
@@ -91,3 +96,5 @@ public:
 	void checkEvents(sf::Event event);
 	int getNewWinId();
 };
+
+#endif

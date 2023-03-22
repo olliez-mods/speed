@@ -1,11 +1,13 @@
-#pragma once
+#ifndef GameWindow_h
+#define GameWindow_h
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "Widgets.h"
+#include "SFAS/Widgets.hpp"
 #include "Window.h"
 #include "Server.h"
 #include "Client.h"
 
+using namespace sfas;
 
 class GameWindow : public Window {
 	int newWinId = 9;
@@ -24,3 +26,5 @@ public:
 	void tick(sf::RenderWindow& window);
 	int getNewWinId();
 };
+
+#endif

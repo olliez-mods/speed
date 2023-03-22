@@ -1,7 +1,10 @@
 #include "GameWindow.h"
+#include "SFAS/RpFinder.hpp"
+
+using namespace sfas;
+
 sf::Texture cardsTexture;
 sf::Texture backOfCardTexture;
-
 
 class Card
 {
@@ -14,35 +17,38 @@ public:
 	{
 		this->active = active;
 		cardNum = std::vector<int> {suit, card};
-		sprite = sf::Sprite(cardsTexture, sf::IntRect(73 * (card - 1) + 1, 98 * suit - 1, 70, 94));
+        
+
+		sprite = sf::Sprite(cardsTexture, sf::IntRect(sf::Vector2i(73 * (card - 1) + 1, 98 * suit - 1), sf::Vector2i(70, 94)));
 	}
 	void setCard(int suit, int card, bool active = true)
 	{
 		this->active = active;
 		cardNum = std::vector<int>{ suit, card };
 		sprite.setTexture(cardsTexture);
-		sprite.setTextureRect(sf::IntRect(73 * (card - 1), 98 * suit, 73, 98));
+		sprite.setTextureRect(sf::IntRect(sf::Vector2i(73 * (card - 1), 98 * suit), sf::Vector2i(73, 98)));
 	}
 	void setCard(std::vector<int> card, bool active = true)
 	{
 		this->active = active;
 		cardNum = std::vector<int>{ card[0], card[1] };
 		sprite.setTexture(cardsTexture);
-		sprite.setTextureRect(sf::IntRect(73 * (card[1] - 1), 98 * card[0], 73, 98));
+		sprite.setTextureRect(sf::IntRect(sf::Vector2i(73 * (card[1] - 1), 98 * card[0]), sf::Vector2i(73, 98)));
 	}
 	void setCard(Card card, bool active = true)
 	{
 		this->active = active;
 		cardNum = card.cardNum;
 		sprite.setTexture(cardsTexture);
-		sprite.setTextureRect(sf::IntRect(73 * (cardNum[1] - 1), 98 * cardNum[0], 73, 98));
+		sprite.setTextureRect(sf::IntRect(sf::Vector2i(73 * (cardNum[1] - 1), 98 * cardNum[0]), sf::Vector2i(73, 98)));
 	}
 };
+
 
 sf::Sprite pickupCard;
 sf::Sprite flipOverCard;
 
-std::vector<Card> deck;
+std::vector<Card> playerDeck;
 std::vector<Card> hand;
 Card left(0, 0);
 Card right(0, 0);
@@ -68,9 +74,9 @@ void resetHandPositions()
 	{
 		hand[i].sprite.setScale(sf::Vector2f(2, 2));
 		if (hand.size() < 5)
-			hand[i].sprite.setPosition(hand[i].sprite.getPosition().x, 500);
+			hand[i].sprite.setPosition(c(hand[i].sprite.getPosition().x, 500));
 		else
-			hand[i].sprite.setPosition(i * 100 + 200, 500);
+			hand[i].sprite.setPosition(c(i * 100 + 200, 500));
 	}
 }
 
@@ -78,27 +84,27 @@ void GameWindow::startWindow()
 {
 	widgetManager = WidgetManager();
 
-	cardsTexture.loadFromFile("cards.png");
+	cardsTexture.loadFromFile(rp() + "cards.png");
 
-	backOfCardTexture.loadFromFile("back.png");
+	backOfCardTexture.loadFromFile(rp() + "back.png");
 
 	resetHandPositions();
 
 	flipOverCard.setTexture(backOfCardTexture);
-	flipOverCard.setScale(0.15, 0.15);
-	flipOverCard.setPosition(600, 200);
+	flipOverCard.setScale(c(0.15, 0.15));
+	flipOverCard.setPosition(c(600, 200));
 
 	pickupCard.setTexture(backOfCardTexture);
-	pickupCard.setScale(0.15, 0.15);
-	pickupCard.setPosition(15, 500);
+	pickupCard.setScale(c(0.15, 0.15));
+	pickupCard.setPosition(c(15, 500));
 
-	left.sprite.setPosition(200, 200);
-	left.sprite.setScale(sf::Vector2f(2, 2));
-	right.sprite.setPosition(420, 200);
-	right.sprite.setScale(sf::Vector2f(2, 2));
+	left.sprite.setPosition(c(200, 200));
+	left.sprite.setScale(c(2, 2));
+	right.sprite.setPosition(c(420, 200));
+	right.sprite.setScale(c(2, 2));
 
-	playButton = Button(10, 10, 100, 50);
-	playButton.setTexture("button.png", "button_pressed.png");
+	playButton = Button(c(10, 10), c(100, 50));
+	playButton.setTexture(rp() + "button.png", rp() + "button_pressed.png");
 	widgetManager.registerWidget(&playButton);
 	playButton.setText("RESTART", sf::Color::Black, 15);
 
@@ -107,7 +113,7 @@ void GameWindow::startWindow()
 	//nextCardButton.setText("NEXT CARD", sf::Color::Black, 15);
 
 	tableTexture = sf::Texture();
-	tableTexture.loadFromFile("table.jpg");
+	tableTexture.loadFromFile(rp() + "table.jpg");
 
 	tableRect = sf::RectangleShape(sf::Vector2f(800, 600));
 	tableRect.setTexture(&tableTexture);
@@ -132,12 +138,12 @@ void GameWindow::tick(sf::RenderWindow& window)
 		Client::getData() >> command;
 
 		if (command == "addCard"){
-			sf::Uint16 suit = 1;
-			sf::Uint16 card = 11;
+			int16_t suit = 1;
+			int16_t card = 11;
 			Client::getData() >> command >> suit >> card;
 		}else 
 		if (command == "newGame"){
-			deck.clear();
+			playerDeck.clear();
 			hand.clear();
 			hand = {
 				Card(0, 1, false),
@@ -149,20 +155,20 @@ void GameWindow::tick(sf::RenderWindow& window)
 			std::cout << "new game\n";
 		}else
 		if (command == "addToDeck") {
-			sf::Uint16 suit;
-			sf::Uint16 card;
+			int16_t suit;
+            int16_t card;
 			Client::getData() >> command >> suit >> card;
-			deck.push_back(Card(suit, card));
+			playerDeck.push_back(Card(suit, card));
 		}else
 		if (command == "setLeft") {
-			sf::Uint16 suit;
-			sf::Uint16 card;
+			int16_t suit;
+			int16_t card;
 			Client::getData() >> command >> suit >> card;
 			left.setCard(suit, card);
 		}else
 		if (command == "setRight") {
-			sf::Uint16 suit;
-			sf::Uint16 card;
+			int16_t suit;
+			int16_t card;
 			Client::getData() >> command >> suit >> card;
 			right.setCard(suit, card);
 		}
@@ -230,7 +236,7 @@ void GameWindow::tick(sf::RenderWindow& window)
 				if (hand[selectedCardIndex].cardNum[1] == left.cardNum[1] - 1 || hand[selectedCardIndex].cardNum[1] == left.cardNum[1] + 1 ||
 					(hand[selectedCardIndex].cardNum[1] == 1 && left.cardNum[1] == 13) || (hand[selectedCardIndex].cardNum[1] == 13 && left.cardNum[1] == 1)) {
 					sf::Packet packet;
-					packet << "setLeft" << sf::Uint16(hand[selectedCardIndex].cardNum[0]) << sf::Uint16(hand[selectedCardIndex].cardNum[1]);
+					packet << "setLeft" << int16_t(hand[selectedCardIndex].cardNum[0]) << int16_t(hand[selectedCardIndex].cardNum[1]);
 					Client::sendData(packet);
 					removeCard = true;
 				}
@@ -243,7 +249,7 @@ void GameWindow::tick(sf::RenderWindow& window)
 				if (hand[selectedCardIndex].cardNum[1] == right.cardNum[1] - 1 || hand[selectedCardIndex].cardNum[1] == right.cardNum[1] + 1 ||
 					(hand[selectedCardIndex].cardNum[1] == 1 && right.cardNum[1] == 13) || (hand[selectedCardIndex].cardNum[1] == 13 && right.cardNum[1] == 1)) {
 					sf::Packet packet;
-					packet << "setRight" << sf::Uint16(hand[selectedCardIndex].cardNum[0]) << sf::Uint16(hand[selectedCardIndex].cardNum[1]);
+					packet << "setRight" << int16_t(hand[selectedCardIndex].cardNum[0]) << int16_t(hand[selectedCardIndex].cardNum[1]);
 					Client::sendData(packet);
 					removeCard = true;
 				}
@@ -263,7 +269,7 @@ void GameWindow::tick(sf::RenderWindow& window)
 		}
 	}
 
-	if (deck.size() == 0 && hand.size() == 0)
+	if (playerDeck.size() == 0 && hand.size() == 0)
 	{
 		sf::Packet packet;
 		packet << "win";
@@ -286,7 +292,7 @@ void GameWindow::tick(sf::RenderWindow& window)
 		}
 	}
 
-	if (deck.size() > 0 && !mouseDownLastFrame && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+	if (playerDeck.size() > 0 && !mouseDownLastFrame && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 		sf::FloatRect bounds = pickupCard.getGlobalBounds();
 		if (mousePos.x > bounds.left && mousePos.x < bounds.left + bounds.width &&
@@ -297,9 +303,9 @@ void GameWindow::tick(sf::RenderWindow& window)
 
 				if (!card.active)
 				{
-					card.setCard(deck[0]);
+					card.setCard(playerDeck[0]);
 					card.active = true;
-					deck.erase(deck.begin(), deck.begin() + 1);
+					playerDeck.erase(playerDeck.begin(), playerDeck.begin() + 1);
 					break;
 				}
 			}
@@ -323,7 +329,8 @@ void GameWindow::tick(sf::RenderWindow& window)
 		window.draw(card.sprite);
 	}
 	window.draw(flipOverCard);
-	window.draw(pickupCard);
+	if(playerDeck.size() > 0)
+		window.draw(pickupCard);
 
 	window.display();
 }
